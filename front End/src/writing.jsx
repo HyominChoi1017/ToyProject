@@ -12,7 +12,7 @@ export default function Writing()  {
             
             <textarea placeholder='내생각입력'className='cont'></textarea>
             <div className='writee'></div>
-            <button className='pl'onClick={()=>{navigate('/main')} }>플레이리스트등록</button>
+            <button className='plo'onClick={()=>{navigate('/main')} }>플레이리스트등록</button>
             <button className='no' onClick={()=>{navigate('/main')} }>취소</button>
         </div>
     );

@@ -8,18 +8,12 @@ import Eheqhrl from './eheqhrl';
 import Player from './player';
 function App() {
   return (
-    
+   
     <div className='App'>
+
       
     <BrowserRouter>
-    <nav>
-      <Link to={'/main'}>main</Link>
-      <Link to={'/player'}>player</Link>
-      <Link to={'/profile'}>profile</Link>
-      <Link to={'/eheqhrl'}>eheqhrl</Link>
-      <Link to={'/writing'}>writing</Link>
-
-    </nav>
+    
     <Routes>
       <Route path='/' element={<Login />} />
       <Route path='/signup' element={<Signup />} />
