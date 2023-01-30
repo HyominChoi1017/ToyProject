@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from .models import User
+from rest_framework import status
+from rest_framework.response import Response
+from .models import (User, Post, Comment)
+from .serializers import (PostSerializer, UserSerializer, CommentSerializer)
 
 import json
 import re
 from json.decoder import JSONDecodeError
-
 from django.http import JsonResponse
 from django.views import View
+from django.views.generic import ListView
 from django.db.models import Q
 
 # Create your views here.
@@ -87,3 +90,46 @@ class Login(View):
 
         except JSONDecodeError:
             return JsonResponse({'message': 'JSON_DECODE_ERROR'}, status=400)
+
+
+class PostView(APIView):
+    def get(self, request): 
+        query = Post.objects.all() 
+        serializer = PostSerializer(query, many=True)
+        print("data:", serializer.data)
+        return Response(serializer.data)
+
+    def post(self, request):
+            serializer = PostSerializer(data = request.data, many=True)
+            # 나중에 유효성검사 진행하셈
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=200)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class SinglePostView(APIView):
+    def get(self, request, post_id):
+        query = Post.objects.filter(id=post_id)
+        print("data:", query)
+        serializer = PostSerializer(query, many=False)
+        return Response(serializer.data)
+
+class UserView(APIView):
+    def get(self, request, user_id):
+        query = User.objects.filter(id=user_id)
+        serializer = UserSerializer(query, many=False)
+        return Response(serializer.data)
+
+class CommentView(APIView):
+    def get(self, request, post_id):
+        query = Comment.objects.filter(post_id=post_id)
+        serializer = CommentSerializer(query, many=True)
+        print("Comments of PostID {}: {}".format(post_id, serializer.data))
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer = CommentSerializer(data = request.data, many=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=200)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
