@@ -1,0 +1,44 @@
+.ema{
+    position: absolute;
+    top: 25%;
+    width: 30%;
+    left: 35%;
+    height: 50px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 18px; color: rgb(225, 163, 219)
+  }
+  .pass{
+    position: absolute;
+    top: 35%;
+    width: 30%;
+    left: 35%;
+    height: 50px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 18px; color: rgb(225, 163, 219)
+  }
+  .wode{
+    position: absolute;
+    top: 45%;
+    width: 30%;
+    left: 35%;
+    height: 50px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid #999;
+    font-size: 18px; color: rgb(225, 163, 219)
+  }
+  .signu{
+    position: absolute;
+    left: 35%;
+    top:64%;
+    width: 30%;
+    height: 50px;
+    background-color: transparent;
+    border-bottom: none;
+    border: none;
+    font-size: 18px; color: rgb(225, 163, 219)
+  }

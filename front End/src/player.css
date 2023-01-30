@@ -1,0 +1,44 @@
+.hous{
+    color: blue;
+    position: absolute;
+    left: 90%;
+    top: 45%;
+   }
+   .ehe{
+       color: gray;
+       position: absolute;
+    left: 90%;
+    top: 30%;
+  }
+   
+   .pl{
+       color: gray;
+       position: absolute;
+    left: 90%;
+    top: 55%;
+   }
+   .Arr{
+       color: red;
+       position: absolute;
+       left: 90%;
+       top: 70%;
+   }
+    
+  .ay{
+    position: absolute;
+    left: 47%;
+    top: 33%;
+    color: grey;
+  }
+  .for{
+    position: absolute;
+    left: 56%;
+    top: 33%;
+    color: grey;
+  }
+  .bac{
+    position: absolute;
+    left: 37%;
+    top: 33%;
+    color: grey;
+  }

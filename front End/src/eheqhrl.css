@@ -1,0 +1,53 @@
+.hous{
+ color: blue;
+}
+.ehe{
+    color: gray;
+}
+.pl{
+    color: gray;
+}
+.Arr{
+    color: red;
+}
+.earch{
+    position: absolute;
+    width: 87%;
+    height: 4%;
+    left: 1%;
+    top:15%;
+  }
+
+.chl{
+  color: aliceblue;
+  position: absolute;
+  top: 11%;
+}
+.topp{
+    position: absolute;
+    top: 25%;
+    left: 1%;
+    background-color: #000;
+    color: rgb(248, 7, 7);
+    width: 86%;
+    height: 20%;
+   
+   }
+   .lately{
+     position: absolute;
+    top: 47%;
+    left: 1%;
+    background-color: #000;
+    color: rgb(248, 7, 184);
+    width: 86%;
+    height: 20%;
+   }
+   .rec{
+     position: absolute;
+     top: 69%;
+     left: 1%;
+     background-color: #000;
+     color: rgb(143, 84, 127);
+     width: 86%;
+     height: 20%;
+   }
