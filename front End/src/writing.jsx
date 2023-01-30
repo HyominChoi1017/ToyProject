@@ -14,6 +14,7 @@ export default function Writing()  {
             <div className='writee'></div>
             <button className='plo'onClick={()=>{navigate('/main')} }>플레이리스트등록</button>
             <button className='no' onClick={()=>{navigate('/main')} }>취소</button>
+            
         </div>
     );
 }
