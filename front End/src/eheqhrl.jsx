@@ -6,23 +6,33 @@ import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import {faArrowRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import './eheqhrl.css'
+import {useState} from 'react';
+
 export default function Eheqhrl()  {
-    let navigate = useNavigate();
+    const [isActive,setIsActive] =useState(false)
+    const [vise,setVise]=useState(false)
     return (
-        <div>
-           <a href="/main"><FontAwesomeIcon icon={faHouse}className="hous" size = '4x'/></a>  
-            <input type="text" className='earch' placeholder='검색'/> 
-            <a href="/eheqhrl"><FontAwesomeIcon icon={faMagnifyingGlass}  size="4x"className="ehe"/></a>
-            
-            <a href="/player"><FontAwesomeIcon icon={faPlay } size="4x"className="pl"/></a>
-             
-             <a href="/"><FontAwesomeIcon icon={faArrowRightToBracket} size="4x"  className ="Arr"/></a>
-             
-            <p className ="chl">최근들은곡</p>
-            <div className='topp'>탑100차트</div>
-            
-            <div className='lately'>최근에 발매된 앨범</div>
-            <div className='rec'>Spotigram 추천 아티스트</div>
+        <div className='dropdown'>
+         <div className='dropdown-btn' onClick={e =>setIsActive(!isActive)}>탑100차트
+         <span className='fas fa-caret-down'></span></div>
+        {isActive &&(
+             <div className='dropdown-content'>
+             <div className='dropdown-item'>헤이즈-헤픈우연</div>
+             <div className='dropdown-item'>자이언티-회전목마</div>
+             <div className='dropdown-item'>임창정-소주한잔</div>
+             </div>
+        )}
+        <div className='dropdownn'>
+         <div className='dropdown-btnn' onClick={e =>setVise(!vise)}>최근들은곡
+         <span className='fas fa-caret-downn'></span></div>
+        {vise &&(
+             <div className='dropdown-contentt'>
+             <div className='dropdown-itemm'>헤이즈-헤픈우연</div>
+             <div className='dropdown-itemm'>자이언티-회전목마</div>
+             <div className='dropdown-itemm'>임창정-소주한잔</div>
+             </div>
+        )}
+        </div>
         </div>
     );
 }

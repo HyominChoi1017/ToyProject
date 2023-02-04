@@ -47,9 +47,8 @@
         width: 100%;
         height: 100%;
       }
-      @media  (max-width: 1024px)
-      {
-       .signup{
-        top: 51px;
-       }
-      };
+        @media only screen and(min-width:960px),(width: 2014px){
+    .signup{
+      top: 70%;
+    }
+  }
