@@ -117,9 +117,11 @@ knn.fit(X)
 print('fit complete')
 
 def recommend(music_id):
-    distance, indices = knn.kneighbors(y.iloc[music_id-1, :].values.reshape(1, -1), n_neighbors=6)
+    result = []
+    distance, indices = knn.kneighbors(y.iloc[music_id-1, :].values.reshape(1, -1), n_neighbors=3)
     for i in indices[0][1:]:
         print("Similar Music: ", y.iloc[i, :]['id'])
+        result.append(y.iloc[i, :]['id'])
 
 # Use the recommend function to recommend similar music
 # recommend(100)

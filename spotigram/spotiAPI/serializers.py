@@ -9,3 +9,13 @@ class MusicChartSerializer(serializers.Serializer):
 
 class ArtistCharSerializer(serializers.Serializer):
     pass
+
+
+ 
+class Music(object):
+    def __init__(self, id):
+        self.id = id
+
+
+class recommandSerializer(serializers.Serializer):
+    recommandation = serializers.CharField(max_length=100)
