@@ -1,4 +1,8 @@
+import time
+
 from django.shortcuts import render, redirect
+
+from .form import PlaylistForm
 from .models import User,Playlist
 import json
 import re
@@ -14,7 +18,6 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
-from django.utils.encoding import force_bytes, force_text
 # Create your views here.
 
 PASSWORD_MINIMUM_LENGTH = 8
@@ -118,6 +121,48 @@ class PlaySearch(View):
         if request.method == 'POST':
             searched = request.POST['searched']
             playlist = Playlist.objects.filter(name__contains=searched)
-            return render(request, 'main.jsx', {'searched': searched, 'playlist': playlist})
+            return render(request, 'player.jsx', {'searched': searched, 'playlist': playlist})
         else:
-            return render(request, 'main.jsx', {})
+            return render(request, 'player.jsx', {})
+
+# 'user_id','Title','Data','musician','listenDay','listenCount'
+class PlayCreate(View):
+    def new(self,request):
+        form = PlaylistForm()  # 폼 생성
+        return render(request, 'player.jsc', {'form': form})
+    def create(slef,request):
+        form = PlaylistForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_playlist = form.save(commit=False)
+            new_playlist.listenDay = time.time()
+            new_playlist.save()
+            return redirect('detail', new_playlist.id)
+        return redirect('home')
+
+class PlayRead(View):
+    def musicList(self,request):
+        musics = Playlist.objects.filter(writer='musician')
+
+        return render(request, 'player.html', {'musics': musics})
+
+    def detail(self,request, Playlist_id):
+        details = Playlist.objects.get(pk=Playlist_id)  # 1) pk=Playlist_id를 만족하는 객체 하나
+        return render(request, 'detail.html', {'details': details})
+
+    # 'user_id','Title','Data','musician','listenDay','listenCount'
+class PlayUpdate(View):
+    def update(self,request, id):
+        update_Playlist = Playlist.objects.get(id=id)  # 기존 데이터 로드
+        update_Playlist.user_id = request.POST['user_id']
+        update_Playlist.Title = request.POST['Title']
+        update_Playlist.Data = request.POST['Date']
+        update_Playlist.musician = request.POST['musician']
+        update_Playlist.listenCount+=1
+        update_Playlist.save()  # 새로 저장
+        return redirect('detail', update_Playlist.id)
+
+class PlayDelete(View):
+    def delete(request, id):
+        delete_Playlist = Playlist.objects.get(id=id)
+        delete_Playlist.delete()
+        return redirect('blogList')
