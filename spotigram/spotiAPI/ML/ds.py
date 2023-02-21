@@ -1,8 +1,10 @@
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
+import time
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle  
 
 CLIENT_ID = 'f447245b08ed4436874b6d9099c9af29'
 CLIENT_SECRET = 'd1975fef9a514dfca16e1ff7f7db3371'
@@ -12,8 +14,8 @@ sp = spotipy.Spotify(client_credentials_manager=ccm)
 
 
 def getAlbumDF():  
-    df_album = pd.DataFrame()
 
+    df_album = pd.DataFrame()
     for i in range(0, 1000, 50):
         track_result = sp.search(q='year:2023', type='track', limit=50, offset=i)
         for i, t in enumerate(track_result['tracks']['items']):
@@ -34,27 +36,49 @@ def getAlbumDF():
     print(df_album)
 
 def getTrackDF():
+
+    search_range = [
+            (0, 1000),
+            (1000, 2000), 
+            (2000, 3000),
+            (3000, 4000),
+            (4000, 5000),
+            (5000, 6000)
+            ]
+
+    year_range = list(range(2011, 2024))
+
+
     tf_df = pd.DataFrame(columns = ['danceability', 'energy', 'key', 'loudness', 'mode', 'speechiness', 'acousticness', 'instrumentalness', 'liveness', 'valence', 'tempo', 'type', 'id', 'url', 'track_href', 'analysis_url', 'duration_ms', 'time_signature'])
     drop_cols = ['type', 'url', 'track_href', 'analysis_url', 'uri']
-    for i in range(0, 1000, 50):
-        track_result = sp.search(q='year:2023', type='track', limit=50, offset=i)
-        track_features = []
-        for _, t in enumerate(track_result['tracks']['items']):
-            track_id = t['id']
-            af = sp.audio_features(track_id)
-            track_features.append(af) 
-        for item in track_features:
-            for feat in item:
-                tf_df = tf_df.append(feat, ignore_index=True)
+
+    start = time.time()
+    for yr in year_range:
+        for i in range(0, 1000, 50):
+            track_result = sp.search(q='year:{}'.format(yr), type='track', limit=50, offset=i)
+            track_features = []
+            for _, t in enumerate(track_result['tracks']['items']):
+                track_id = t['id']
+                af = sp.audio_features(track_id)
+                track_features.append(af) 
+            for item in track_features:
+                for feat in item:
+                    tf_df = tf_df.append(feat, ignore_index=True)
+    end = time.time()
+
+    print('time duration for data scrolling:', end-start)
+
     tf_df = tf_df.drop(columns=drop_cols)
+    print('Data shape:',tf_df.shape)
     return tf_df
 
 
-def getArtistDF():
+def getArtistDF(): 
+
     artist_df = pd.DataFrame()
     a_popularity = []
     a_genres = []
-    a_followers = []
+    a_followers = [] 
     for i in range(0, 1000, 50):
         track_result = sp.search(q='year:2023', type='track', limit=50, offset=i)
         for _, t in enumerate(track_result['tracks']['items']):
@@ -63,27 +87,26 @@ def getArtistDF():
             a_popularity.append(artist['popularity'])
             a_genres.append(artist['genres'])
             a_followers.append(artist['followers']['total'])
+
+
+
+
+    
     artist_df = artist_df.assign(artist_popularity=a_popularity, artist_genres=a_genres, artist_followers=a_followers)
     return artist_df 
-
-def preprocess(df):
-    pass
-
-
+ 
 
 
 # df = getTrackDF()
-# df.to_pickle('./fast.pkl')
+# df.to_csv('fast.csv')
 
 '''
 Function about training data
 '''
-
-df = pd.read_pickle('./fast.pkl')
-X = df.drop(['id'], axis=1).copy()
-y = df['id'].copy()
-
-print(X, y)
+# pkl_df = pd.read_pickle('fast.pkl')
+# pkl_df.to_csv('fast.csv')
+ 
+# print(X, y)
 
 '''
 Working Space..!
@@ -92,31 +115,34 @@ Working Space..!
 # print(df.columns)
 # print(df.describe())
 
-print(len(X.columns))
-
-import matplotlib.pyplot as plt
-import seaborn as sb
- 
 # print(X)
-# sb.set(rc={'figure.figsize':(12, 10)})
-# sb.heatmap(X.corr(), annot=True)
-# plt.show()
+
+# import matplotlib.pyplot as plt
+# import seaborn as sb
+  
+
+df = pd.DataFrame(pd.read_csv("fast.csv"))
+# print(df)
+X = df.drop(['id'], axis=1).copy()
+y = df['id'].copy()
 
 
-# fig, axs = plt.subplots(len(X.columns), 1, figsize=(12, 10))
-# for i in range(len(X.columns)):
-    
-#     axs[i].hist(X[X.columns[i]])
-#     axs[i].set_title(X.columns[i])
-# plt.show() 
 
-from sklearn.neighbors import NearestNeighbors
+# from sklearn.neighbors import NearestNeighbors
 
-knn = NearestNeighbors(n_neighbors=6, algorithm='ball_tree')
-knn.fit(X)
-print('fit complete')
+# knn = NearestNeighbors(n_neighbors=6, algorithm='ball_tree')
+# knn.fit(X)
+# print('fit complete')
 
-def recommend(music_id):
+filename = 'model.sav'
+# pickle.dump(knn, open(filename, 'wb'))
+
+knn = pickle.load(open(filename, 'rb'))
+print('get knn')
+print(knn)
+ 
+
+def recommend(music_id): 
     result = []
     distance, indices = knn.kneighbors(y.iloc[music_id-1, :].values.reshape(1, -1), n_neighbors=3)
     for i in indices[0][1:]:

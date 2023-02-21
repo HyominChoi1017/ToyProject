@@ -19,3 +19,10 @@ class Music(object):
 
 class recommandSerializer(serializers.Serializer):
     recommandation = serializers.CharField(max_length=100)
+
+class searchSerializer(serializers.Serializer):
+    result = serializers.JSONField(default={
+        "artist":{},
+        "album":{},
+        "track":{}
+    })
