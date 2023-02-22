@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 
 
@@ -12,7 +12,7 @@ def get_default_User_interestedPost():
     return {"likedPost":[],"savedPost":[]}
 class User(models.Model): # 
     id = models.IntegerField(default=1, primary_key=True)
-    Username = models.CharField(default="User", max_length=20) #Username를 email부분으로 하겠습니다. / 이메일부분 중복 안되게 했습니다.
+    username = models.CharField(default="User", max_length=20) #Username를 email부분으로 하겠습니다. / 이메일부분 중복 안되게 했습니다.
     Name = models.CharField(default="noname", max_length=20)
     Password = models.CharField(default="", max_length=20)
 
@@ -23,12 +23,12 @@ class User(models.Model): #
     relationShip = models.JSONField(default=get_default_User_relationShip)
 
     intrestedPost = models.JSONField(default=get_default_User_interestedPost)
+    recent_search = models.JSONField(default={'keyword': ''})
+    recent_music = models.JSONField(default={'id': ''})
+    recent_artist = models.JSONField(default={'id': ''})
 
-    class Mete:
-        db_table='users'
-    
     def __str__(self):
-        return "[{}] {}".format(self.id, self.Username)
+        return "[{}] {}".format(self.id, self.username)
 
 
 def get_default_Play_Date():
@@ -38,8 +38,8 @@ class Playlist(models.Model):
     Title = models.CharField(default="My PlayList", max_length=20)
     Data = models.JSONField(default=get_default_Play_Date)
     musician=models.CharField(max_length=200)
-    listenDay=models.DateTimeField()
-    listenCount=models.IntegerField()
+    listenDay=models.DateTimeField(default=timezone.now())
+    listenCount=models.IntegerField(default=0)
 
 def get_default_Post_Tag():
     return {"location":"","user":[]}
