@@ -15,9 +15,9 @@ from django.urls import path
 from .views import RegisterView, LoginView, UserDetailView, PlaylistList, PlaylistDetail
 
 urlpatterns = [
-    path('register/', RegisterView.as_view(), name='register'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
+    path('Register/', RegisterView.as_view(), name='register'),
+    path('Login/', LoginView.as_view(), name='login'),
+    path('Userdate/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('playlists/', PlaylistList.as_view(), name='playlist-list'),
     path('playlists/<int:pk>/', PlaylistDetail.as_view(), name='playlist-detail'),
 ]
