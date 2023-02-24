@@ -1,47 +1,41 @@
-from .models import Playlist, User
-from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+from .models import Playlist
 from django import forms
+from django.contrib.auth import get_user_model
+from django import forms
+from .models import MyUser, PlaylistModle
+User = get_user_model()
 
 class PlaylistForm(forms.ModelForm):
     class Meta:
         model = Playlist
-        fields = ['user_id', 'Title', 'Data', 'musician', 'listenDay', 'listenCount']
+        fields = ['user', 'title', 'data', 'musician', 'listen_day', 'listen_count']
 
 
-class MyUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1', 'password2')
 
-    def save(self, commit=True):
-        user = super(MyUserCreationForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
-        if commit:
-            user.save()
-        return user
-
-class MyUserLoginForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+class UserForm(forms.ModelForm):
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
-        model = User
-        fields = ['username', 'password']
+        model = MyUser
+        fields = ['email', 'name']
 
-    def clean(self):
-        cleaned_data = super().clean()
-        username = cleaned_data.get('username')
-        password = cleaned_data.get('password')
+    def clean_password2(self):
+        password1 = self.cleaned_data.get('password1')
+        password2 = self.cleaned_data.get('password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords don't match")
+        return password2
 
-        if username and password:
-            self.user_cache = authenticate(username=username, password=password)
-            if self.user_cache is None:
-                raise forms.ValidationError('Invalid login credentials')
-            elif not self.user_cache.is_active:
-                raise forms.ValidationError('Inactive user')
-        return cleaned_data
 
-    def get_user(self):
-        return self.user_cache
+class LoginForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
+class PlaylistModelForm(forms.ModelForm):
+    class Meta:
+        model = PlaylistModle
+        fields = ['name', 'description', 'songs']
+

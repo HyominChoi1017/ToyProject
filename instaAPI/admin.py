@@ -1,4 +1,5 @@
 from django.contrib import admin
+from .models import MyUser, PlaylistModle
 from .models import (
     User, Post, Comment
     )
@@ -14,3 +15,7 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(Post)
 admin.site.register(Comment)
+admin.site.register(MyUser)
+admin.site.register(PlaylistModle)
+
+
